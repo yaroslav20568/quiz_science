@@ -96,48 +96,46 @@ class _QuizScreenState extends State<QuizScreen> {
               progress: progress,
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      question.text,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        question.text,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 32),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: question.options.length,
-                        itemBuilder: (context, index) {
-                          return AnswerOption(
-                            text: question.options[index],
-                            isSelected: selectedAnswerIndex == index,
-                            onTap: () => _selectAnswer(index),
-                          );
-                        },
+                      const SizedBox(height: 32),
+                      ...question.options.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        return AnswerOption(
+                          text: entry.value,
+                          isSelected: selectedAnswerIndex == index,
+                          onTap: () => _selectAnswer(index),
+                        );
+                      }),
+                      const SizedBox(height: 16),
+                      QuizNavigationButtons(
+                        showPrevious: currentQuestionIndex > 0,
+                        isNextEnabled: selectedAnswerIndex != null,
+                        nextButtonText:
+                            currentQuestionIndex < quiz.totalQuestions - 1
+                            ? 'Next'
+                            : 'Finish',
+                        onPrevious: currentQuestionIndex > 0
+                            ? _previousQuestion
+                            : null,
+                        onNext: selectedAnswerIndex != null
+                            ? _nextQuestion
+                            : null,
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    QuizNavigationButtons(
-                      showPrevious: currentQuestionIndex > 0,
-                      isNextEnabled: selectedAnswerIndex != null,
-                      nextButtonText:
-                          currentQuestionIndex < quiz.totalQuestions - 1
-                          ? 'Next'
-                          : 'Finish',
-                      onPrevious: currentQuestionIndex > 0
-                          ? _previousQuestion
-                          : null,
-                      onNext: selectedAnswerIndex != null
-                          ? _nextQuestion
-                          : null,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
