@@ -1,4 +1,4 @@
-import 'question.dart';
+import 'package:quiz_science/models/question.dart';
 
 enum Subject { mathematics, physics, chemistry }
 
