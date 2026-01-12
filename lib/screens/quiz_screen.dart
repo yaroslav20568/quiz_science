@@ -3,6 +3,7 @@ import 'package:quiz_science/constants/index.dart';
 import 'package:quiz_science/models/index.dart';
 import 'package:quiz_science/services/index.dart';
 import 'package:quiz_science/screens/index.dart';
+import 'package:quiz_science/widgets/index.dart';
 
 class QuizScreen extends StatefulWidget {
   final Subject subject;
@@ -89,33 +90,10 @@ class _QuizScreenState extends State<QuizScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              color: AppColors.surface,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Question ${currentQuestionIndex + 1} of ${quiz.totalQuestions}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  LinearProgressIndicator(
-                    value: progress,
-                    backgroundColor: AppColors.border,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      AppColors.primary,
-                    ),
-                  ),
-                ],
-              ),
+            QuizProgressHeader(
+              currentQuestion: currentQuestionIndex + 1,
+              totalQuestions: quiz.totalQuestions,
+              progress: progress,
             ),
             Expanded(
               child: Padding(
@@ -136,122 +114,28 @@ class _QuizScreenState extends State<QuizScreen> {
                       child: ListView.builder(
                         itemCount: question.options.length,
                         itemBuilder: (context, index) {
-                          final isSelected = selectedAnswerIndex == index;
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: InkWell(
-                              onTap: () => _selectAnswer(index),
-                              borderRadius: BorderRadius.circular(12),
-                              child: Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? AppColors.selectedOption.withValues(
-                                          alpha: 0.1,
-                                        )
-                                      : AppColors.surface,
-                                  border: Border.all(
-                                    color: isSelected
-                                        ? AppColors.selectedOption
-                                        : AppColors.border,
-                                    width: isSelected ? 2 : 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 24,
-                                      height: 24,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: isSelected
-                                              ? AppColors.selectedOption
-                                              : AppColors.border,
-                                          width: 2,
-                                        ),
-                                        color: isSelected
-                                            ? AppColors.selectedOption
-                                            : Colors.transparent,
-                                      ),
-                                      child: isSelected
-                                          ? const Icon(
-                                              Icons.check,
-                                              size: 16,
-                                              color: AppColors.surface,
-                                            )
-                                          : null,
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Expanded(
-                                      child: Text(
-                                        question.options[index],
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: AppColors.textPrimary,
-                                          fontWeight: isSelected
-                                              ? FontWeight.w600
-                                              : FontWeight.normal,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                          return AnswerOption(
+                            text: question.options[index],
+                            isSelected: selectedAnswerIndex == index,
+                            onTap: () => _selectAnswer(index),
                           );
                         },
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        if (currentQuestionIndex > 0)
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: _previousQuestion,
-                              style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                side: const BorderSide(
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              child: const Text(
-                                'Previous',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                            ),
-                          ),
-                        if (currentQuestionIndex > 0) const SizedBox(width: 16),
-                        Expanded(
-                          flex: currentQuestionIndex == 0 ? 1 : 1,
-                          child: ElevatedButton(
-                            onPressed: selectedAnswerIndex != null
-                                ? _nextQuestion
-                                : null,
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              backgroundColor: AppColors.primary,
-                              disabledBackgroundColor: AppColors.border,
-                            ),
-                            child: Text(
-                              currentQuestionIndex < quiz.totalQuestions - 1
-                                  ? 'Next'
-                                  : 'Finish',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: AppColors.surface,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                    QuizNavigationButtons(
+                      showPrevious: currentQuestionIndex > 0,
+                      isNextEnabled: selectedAnswerIndex != null,
+                      nextButtonText:
+                          currentQuestionIndex < quiz.totalQuestions - 1
+                          ? 'Next'
+                          : 'Finish',
+                      onPrevious: currentQuestionIndex > 0
+                          ? _previousQuestion
+                          : null,
+                      onNext: selectedAnswerIndex != null
+                          ? _nextQuestion
+                          : null,
                     ),
                   ],
                 ),

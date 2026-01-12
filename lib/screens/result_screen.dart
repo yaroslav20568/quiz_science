@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_science/constants/index.dart';
 import 'package:quiz_science/models/index.dart';
+import 'package:quiz_science/widgets/index.dart';
 
 class ResultScreen extends StatelessWidget {
   final Quiz quiz;
@@ -35,58 +36,11 @@ class ResultScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(32),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: resultColor.withValues(alpha: 0.3),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        '${quiz.subject.name} Quiz',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        '$correctAnswers/${quiz.totalQuestions}',
-                        style: TextStyle(
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                          color: resultColor,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '${percentage.toStringAsFixed(0)}%',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: resultColor,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        correctAnswers == quiz.totalQuestions
-                            ? 'Perfect! All answers are correct!'
-                            : correctAnswers >= quiz.totalQuestions / 2
-                            ? 'Good job! Keep practicing!'
-                            : 'Keep studying! You can do better!',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: AppColors.textSecondary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
+                ResultSummaryCard(
+                  quiz: quiz,
+                  correctAnswers: correctAnswers,
+                  percentage: percentage,
+                  resultColor: resultColor,
                 ),
                 const SizedBox(height: 32),
                 ...quiz.questions.asMap().entries.map((entry) {
@@ -95,79 +49,20 @@ class ResultScreen extends StatelessWidget {
                   final userAnswer = userAnswers[index];
                   final isCorrect = userAnswer == question.correctAnswerIndex;
 
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                isCorrect ? Icons.check_circle : Icons.cancel,
-                                color: isCorrect
-                                    ? AppColors.correctAnswer
-                                    : AppColors.wrongAnswer,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  'Question ${index + 1}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            question.text,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Your answer: ${question.options[userAnswer]}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: isCorrect
-                                  ? AppColors.correctAnswer
-                                  : AppColors.wrongAnswer,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          if (!isCorrect)
-                            Text(
-                              'Correct answer: ${question.options[question.correctAnswerIndex]}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
+                  return QuestionResultCard(
+                    question: question,
+                    questionIndex: index,
+                    userAnswer: userAnswer,
+                    isCorrect: isCorrect,
                   );
                 }),
                 const SizedBox(height: 16),
-                ElevatedButton(
+                AppButton(
+                  text: 'Back to Subjects',
+                  type: AppButtonType.elevated,
                   onPressed: () {
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: AppColors.primary,
-                  ),
-                  child: const Text(
-                    'Back to Subjects',
-                    style: TextStyle(fontSize: 16, color: AppColors.surface),
-                  ),
                 ),
               ],
             ),

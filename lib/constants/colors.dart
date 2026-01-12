@@ -17,4 +17,6 @@ class AppColors {
   static const Color mathColor = Color(0xFFE91E63);
   static const Color physicsColor = Color(0xFF3F51B5);
   static const Color chemistryColor = Color(0xFF009688);
+
+  static const Color transparent = Color(0x00000000);
 }
