@@ -12,14 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Quiz Science',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
           brightness: Brightness.light,
         ),
         useMaterial3: true,
-        scaffoldBackgroundColor: AppColors.background,
       ),
       home: const SubjectSelectionScreen(),
     );
