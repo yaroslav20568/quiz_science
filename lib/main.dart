@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_science/constants/index.dart';
+
 import 'package:quiz_science/screens/index.dart';
 
 void main() {
