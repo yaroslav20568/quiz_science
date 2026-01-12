@@ -28,73 +28,70 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Quiz Results'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.surface,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: resultColor.withValues(alpha: 0.3)),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    '${quiz.subject.name} Quiz',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(32),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: resultColor.withValues(alpha: 0.3),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  Text(
-                    '$correctAnswers/${quiz.totalQuestions}',
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      color: resultColor,
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '${quiz.subject.name} Quiz',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        '$correctAnswers/${quiz.totalQuestions}',
+                        style: TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          color: resultColor,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '${percentage.toStringAsFixed(0)}%',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: resultColor,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        correctAnswers == quiz.totalQuestions
+                            ? 'Perfect! All answers are correct!'
+                            : correctAnswers >= quiz.totalQuestions / 2
+                            ? 'Good job! Keep practicing!'
+                            : 'Keep studying! You can do better!',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: AppColors.textSecondary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '${percentage.toStringAsFixed(0)}%',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                      color: resultColor,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    correctAnswers == quiz.totalQuestions
-                        ? 'Perfect! All answers are correct!'
-                        : correctAnswers >= quiz.totalQuestions / 2
-                        ? 'Good job! Keep practicing!'
-                        : 'Keep studying! You can do better!',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: AppColors.textSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            Expanded(
-              child: ListView.builder(
-                itemCount: quiz.questions.length,
-                itemBuilder: (context, index) {
-                  final question = quiz.questions[index];
+                ),
+                const SizedBox(height: 32),
+                ...quiz.questions.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final question = entry.value;
                   final userAnswer = userAnswers[index];
                   final isCorrect = userAnswer == question.correctAnswerIndex;
 
@@ -157,24 +154,24 @@ class ResultScreen extends StatelessWidget {
                       ),
                     ),
                   );
-                },
-              ),
+                }),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    backgroundColor: AppColors.primary,
+                  ),
+                  child: const Text(
+                    'Back to Subjects',
+                    style: TextStyle(fontSize: 16, color: AppColors.surface),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: AppColors.primary,
-              ),
-              child: const Text(
-                'Back to Subjects',
-                style: TextStyle(fontSize: 16, color: AppColors.surface),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

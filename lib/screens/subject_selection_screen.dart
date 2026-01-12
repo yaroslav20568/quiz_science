@@ -10,48 +10,46 @@ class SubjectSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Select Subject'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.surface,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Choose a subject to start the quiz',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 24),
+                const Text(
+                  'Choose a subject to start the quiz',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 48),
-              _buildSubjectCard(
-                context,
-                Subject.mathematics,
-                AppColors.mathColor,
-                Icons.calculate,
-              ),
-              const SizedBox(height: 16),
-              _buildSubjectCard(
-                context,
-                Subject.physics,
-                AppColors.physicsColor,
-                Icons.science,
-              ),
-              const SizedBox(height: 16),
-              _buildSubjectCard(
-                context,
-                Subject.chemistry,
-                AppColors.chemistryColor,
-                Icons.eco,
-              ),
-            ],
+                const SizedBox(height: 48),
+                _buildSubjectCard(
+                  context,
+                  Subject.mathematics,
+                  AppColors.mathColor,
+                  Icons.calculate,
+                ),
+                const SizedBox(height: 16),
+                _buildSubjectCard(
+                  context,
+                  Subject.physics,
+                  AppColors.physicsColor,
+                  Icons.science,
+                ),
+                const SizedBox(height: 16),
+                _buildSubjectCard(
+                  context,
+                  Subject.chemistry,
+                  AppColors.chemistryColor,
+                  Icons.eco,
+                ),
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
       ),
