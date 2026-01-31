@@ -6,6 +6,10 @@
 
 Quiz Science - это мобильное приложение на Flutter для прохождения интерактивных квизов по трем предметам: математика, физика и химия. Приложение позволяет пользователям выбрать предмет, ответить на вопросы с множественным выбором и получить результаты с детальным разбором ответов.
 
+## Демонстрация
+
+![Демонстрация работы](video/demo.gif)
+
 ## Что было сделано
 
 - Создана структура проекта с разделением на экраны, виджеты, модели, сервисы и константы
@@ -45,6 +49,10 @@ A mobile application for taking quizzes on subjects: mathematics, physics, and c
 ## Project Description
 
 Quiz Science is a Flutter mobile application for taking interactive quizzes on three subjects: mathematics, physics, and chemistry. The application allows users to select a subject, answer multiple-choice questions, and receive results with a detailed breakdown of answers.
+
+## Demo
+
+![Demo](video/demo.gif)
 
 ## What Was Done
 
